@@ -23,10 +23,10 @@
 
 package co.aikar.acfexample;
 
+
 import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.MessageKeys;
 import co.aikar.commands.MessageType;
-import co.aikar.commands.PaperBrigadierManager;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -119,6 +119,8 @@ public final class ACFExample extends JavaPlugin {
                 Arrays.asList("1", "2", "3", "4", "5")
         );
         commandManager.registerCommand(new BrigadierTest());
+        commandManager.getCommandCompletions().setDefaultCompletion("someobject", SomeObject.class);
+        commandManager.registerCommand(new SuggestionCommand());
     }
 
     // Typical Bukkit Plugin Scaffolding

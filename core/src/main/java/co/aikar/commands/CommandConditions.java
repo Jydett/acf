@@ -24,6 +24,7 @@
 package co.aikar.commands;
 
 import co.aikar.util.Table;
+import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -31,11 +32,11 @@ import java.util.Locale;
 import java.util.Map;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted") // No IDEA, you are wrong
-public class CommandConditions <
+public class CommandConditions<
         I extends CommandIssuer,
         CEC extends CommandExecutionContext<CEC, I>,
         CC extends ConditionContext<I>
-    > {
+        > {
     private CommandManager manager;
     private Map<String, Condition<I>> conditions = new HashMap<>();
     private Table<Class<?>, String, ParameterCondition<?, ?, ?>> paramConditions = new Table<>();
@@ -104,6 +105,9 @@ public class CommandConditions <
             String[] split = ACFPatterns.COLON.split(cond, 2);
             ParameterCondition condition;
             Class<?> cls = execContext.getParam().getType();
+            if (cls.isPrimitive()) {
+                cls = ACFUtil.PRIMITIVES_TO_WRAPPERS.get(cls);
+            }
             String id = split[0].toLowerCase(Locale.ENGLISH);
             do {
                 condition = this.paramConditions.get(cls, id);
@@ -117,7 +121,7 @@ public class CommandConditions <
 
             if (condition == null) {
                 RegisteredCommand cmd = execContext.getCmd();
-                this.manager.log(LogLevel.ERROR, "Could not find command condition " + id + " for " + cmd.method.getName() + "::" +execContext.getParam().getName());
+                this.manager.log(LogLevel.ERROR, "Could not find command condition " + id + " for " + cmd.method.getName() + "::" + execContext.getParam().getName());
                 continue;
             }
             String config = split.length == 2 ? split[1] : null;
@@ -129,11 +133,11 @@ public class CommandConditions <
         }
     }
 
-    public interface Condition <I extends CommandIssuer> {
+    public interface Condition<I extends CommandIssuer> {
         void validateCondition(ConditionContext<I> context) throws InvalidCommandArgument;
     }
 
-    public interface ParameterCondition <P, CEC extends CommandExecutionContext, I extends CommandIssuer> {
+    public interface ParameterCondition<P, CEC extends CommandExecutionContext, I extends CommandIssuer> {
         void validateCondition(ConditionContext<I> context, CEC execContext, P value) throws InvalidCommandArgument;
     }
 }

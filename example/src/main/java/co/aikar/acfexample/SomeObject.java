@@ -65,11 +65,13 @@ public abstract class SomeObject {
             super(1);
         }
     }
+
     public static class Test2 extends SomeObject {
         Test2() {
             super(2);
         }
     }
+
     public static class TestOther extends SomeObject {
         TestOther(Integer other) {
             super(other);

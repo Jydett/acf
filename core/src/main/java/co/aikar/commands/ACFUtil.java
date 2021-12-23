@@ -25,6 +25,7 @@ package co.aikar.commands;
 
 
 import co.aikar.commands.apachecommonslang.ApacheCommonsLangUtil;
+import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -50,6 +52,19 @@ public final class ACFUtil {
 
     private ACFUtil() {
     }
+
+    public static final Map<Class<?>, Class<?>> PRIMITIVES_TO_WRAPPERS
+            = new ImmutableMap.Builder<Class<?>, Class<?>>()
+            .put(boolean.class, Boolean.class)
+            .put(byte.class, Byte.class)
+            .put(char.class, Character.class)
+            .put(double.class, Double.class)
+            .put(float.class, Float.class)
+            .put(int.class, Integer.class)
+            .put(long.class, Long.class)
+            .put(short.class, Short.class)
+            .put(void.class, Void.class)
+            .build();
 
     public static String padRight(String s, int n) {
         return String.format("%1$-" + n + "s", s);

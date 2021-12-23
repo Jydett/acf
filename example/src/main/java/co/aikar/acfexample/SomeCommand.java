@@ -23,6 +23,7 @@
 
 package co.aikar.acfexample;
 
+
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
@@ -162,6 +163,12 @@ public class SomeCommand extends BaseCommand {
         @CommandCompletion("%test")
         public void onTest2(Player player, @Values("%test") String testY) {
             player.sendMessage("You got test inner test2: " + testY);
+        }
+
+        @Subcommand("test3")
+        @CommandCompletion("* <testY>")
+        public void onTest3(Player player, String testY) {
+            player.sendMessage("You got test inner test3: " + testY);
         }
 
         // Nesting inner classes works infinitely recursive
