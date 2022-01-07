@@ -24,6 +24,7 @@
 package co.aikar.commands;
 
 import java.lang.annotation.Annotation;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ import java.util.List;
 public class CommandOperationContext<I extends CommandIssuer> {
 
     private final CommandManager manager;
-    private final I issuer;
+    private final WeakReference<I> issuer;
     private final BaseCommand command;
     private final String commandLabel;
     private final String[] args;
@@ -42,7 +43,7 @@ public class CommandOperationContext<I extends CommandIssuer> {
 
     CommandOperationContext(CommandManager manager, I issuer, BaseCommand command, String commandLabel, String[] args, boolean isAsync) {
         this.manager = manager;
-        this.issuer = issuer;
+        this.issuer = new WeakReference(issuer);
         this.command = command;
         this.commandLabel = commandLabel;
         this.args = args;
@@ -54,7 +55,7 @@ public class CommandOperationContext<I extends CommandIssuer> {
     }
 
     public I getCommandIssuer() {
-        return issuer;
+        return issuer.get();
     }
 
     public BaseCommand getCommand() {
